@@ -1,4 +1,4 @@
 ,,nodes,edges,top_strength,top_betweenness
-2,1,89,591,"['US Congress', 'House of Representatives', 'US Senate', 'US-Israel war on Iran', 'US supreme court']","['US Congress', 'US-Israel war on Iran', 'US Senate', 'US supreme court', 'South Carolina']"
-3,2,53,133,"['US Congress', 'US Senate', 'House of Representatives', 'US-Israel war on Iran', 'US voting rights']","['US Congress', 'US-Israel war on Iran', 'US Senate', 'South Carolina', 'US voting rights']"
-5,3,27,34,"['US Congress', 'US Senate', 'House of Representatives', 'US-Israel war on Iran', 'US voting rights']","['US Congress', 'US Senate', 'US-Israel war on Iran', 'Florida', 'US voting rights']"
+2,1,87,515,"['US Congress', 'US-Israel war on Iran', 'US supreme court', 'US voting rights', 'Florida']","['US Congress', 'US-Israel war on Iran', 'US supreme court', 'South Carolina', 'US voting rights']"
+3,2,51,106,"['US Congress', 'US-Israel war on Iran', 'US supreme court', 'US voting rights', 'Florida']","['US Congress', 'US-Israel war on Iran', 'South Carolina', 'US voting rights', 'US supreme court']"
+5,3,25,26,"['US Congress', 'US-Israel war on Iran', 'US voting rights', 'US supreme court', 'US foreign policy']","['US Congress', 'US-Israel war on Iran', 'Florida', 'US voting rights', 'US supreme court']"

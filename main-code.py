@@ -209,6 +209,16 @@ def plot_monthly(rows):
     plt.savefig(FIG_DIR / "monthly.png", dpi=200, bbox_inches="tight")
     plt.close()
 
+#merge congress tags into one
+CONGRESS_TAGS = {"US Senate", "House of Representatives"}
+
+def merge_congress(rows):
+    merged = []
+    for r in rows:
+        tags = ["US Congress" if t in CONGRESS_TAGS else t for t in r["tags"]]
+        merged.append({**r, "tags": list(dict.fromkeys(tags))})  # dedupe, keep order
+    return merged
+
 
 # ----------------------------------------------------------------------
 # MAIN
@@ -219,6 +229,10 @@ if __name__ == "__main__":
     # Keep only articles the Guardian tagged as midterms coverage
     rows = [r for r in rows if "US midterm elections 2026" in r["tags"]]
     print(f"Filtered to {len(rows)} articles tagged as midterms")
+
+    #updated merge of congress tags into one for Run D; comment out for Runs A-C
+    rows = [r for r in rows if "US midterm elections 2026" in r["tags"]]
+    rows = merge_congress(rows)   # Run D only; comment out for Runs A-C
 
     inspect(rows)
     G, pairs = build_graph(rows)
