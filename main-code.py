@@ -100,29 +100,36 @@ def inspect(rows):
 
 #########STEP 3: build the co-occurrence graph
 # ----------------------------------------------------------------------
-def build_graph(rows):
+def build_graph(rows, min_tag=MIN_TAG_ARTICLES, min_edge=MIN_EDGE_WEIGHT):
     tag_counts = Counter(t for r in rows for t in set(r["tags"]) - GENERIC_TAGS)
-    keep = {t for t, c in tag_counts.items() if c >= MIN_TAG_ARTICLES}
-
+    keep = {t for t, c in tag_counts.items() if c >= min_tag}
     pairs = Counter()
     for r in rows:
         tags = sorted((set(r["tags"]) - GENERIC_TAGS) & keep)
         pairs.update(itertools.combinations(tags, 2))
-
     G = nx.Graph()
     for (a, b), w in pairs.items():
-        if w >= MIN_EDGE_WEIGHT:
-            # weight = how strongly connected; distance = 1/weight for
-            # shortest-path measures (stronger link = shorter distance)
+        if w >= min_edge:
             G.add_edge(a, b, weight=w, distance=1 / w)
-
-    # store how many articles each tag appears on
     nx.set_node_attributes(G, {t: tag_counts[t] for t in G}, "articles")
-
-    print(f"\nGraph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges, "
-          f"density {nx.density(G):.3f}")
     return G, pairs
 
+def sensitivity(rows, k=5):
+    results = {}
+    for min_tag, min_edge in [(2, 1), (3, 2), (5, 3)]:
+        G, _ = build_graph(rows, min_tag, min_edge)
+        core = G.subgraph(max(nx.connected_components(G), key=len))
+        bt = nx.betweenness_centrality(core, weight="distance")
+        st = dict(core.degree(weight="weight"))
+        results[(min_tag, min_edge)] = {
+            "nodes": G.number_of_nodes(),
+            "edges": G.number_of_edges(),
+            "top_strength": sorted(st, key=st.get, reverse=True)[:k],
+            "top_betweenness": sorted(bt, key=bt.get, reverse=True)[:k],
+        }
+    out = pd.DataFrame(results).T
+    out.to_csv(OUT_DIR / "sensitivity.csv")
+    print(out.to_string())
 
 ##################STEP 4: centrality measures
 # ----------------------------------------------------------------------
@@ -215,9 +222,14 @@ if __name__ == "__main__":
 
     inspect(rows)
     G, pairs = build_graph(rows)
+    print(f"\nGraph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges, "
+          f"density {nx.density(G):.3f}")
     core, table = compute_centrality(G)
     top_pairs(pairs)
     plot_network(core, table)
     plot_heatmap(pairs, table)
     plot_monthly(rows)
+
+    print("\nSensitivity check (Trump and parties removed):")
+    sensitivity(rows)
     print("\nDone. See output/ and figures/.")
