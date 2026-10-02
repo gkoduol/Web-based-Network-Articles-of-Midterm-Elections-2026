@@ -1,0 +1,11 @@
+,Strength,Betweenness,Closeness
+1,US Congress,US Congress,US Congress
+2,US-Israel war on Iran,US-Israel war on Iran,US-Israel war on Iran
+3,US supreme court,US supreme court,US voting rights
+4,US voting rights,South Carolina,Texas
+5,Florida,US voting rights,US supreme court
+6,US economy,Michigan,California
+7,Michigan,California,South Carolina
+8,Ohio,Florida,Michigan
+9,Iran,Texas,Florida
+10,US foreign policy,Doctors,US economy

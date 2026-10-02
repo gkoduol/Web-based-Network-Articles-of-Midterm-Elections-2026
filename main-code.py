@@ -239,11 +239,20 @@ if __name__ == "__main__":
     print(f"\nGraph: {G.number_of_nodes()} nodes, {G.number_of_edges()} edges, "
           f"density {nx.density(G):.3f}")
     core, table = compute_centrality(G)
+    top10 = pd.DataFrame({
+        "Strength": table["strength"].sort_values(ascending=False).head(10).index,
+        "Betweenness": table["betweenness"].sort_values(ascending=False).head(10).index,
+        "Closeness": table["closeness"].sort_values(ascending=False).head(10).index,
+    })
+    top10.index = range(1, 11)
+    top10.to_csv(OUT_DIR / "table1_top10.csv")
+    print(top10)
+
     top_pairs(pairs)
     plot_network(core, table)
     plot_heatmap(pairs, table)
     plot_monthly(rows)
-
+    
     print("\nSensitivity check (Trump and parties removed):")
     sensitivity(rows)
     print("\nDone. See output/ and figures/.")
