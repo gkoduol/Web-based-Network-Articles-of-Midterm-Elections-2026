@@ -11,5 +11,5 @@ Key Fields the Dataset Includes:
 - ‘sectionName’: desk (e.g. US news, Opinion)
 - ‘tags’: editor-assigned topic labels
 
-**Data Collection: **
+**Data Collection:**
 I wrote a Python script using requests to query the Guardian /search endpoint for the phrase “midterm elections” from January 1, 2026 to September 30, 2026 with show-tags=keyword and 50 results per page. The script pages through all results, pauses between requests, and caches the raw output to data/articles.json so the API is only queried once. The API key is stored in a .env file and excluded from Github. I used pandas for tables, networkx for the graph and centrality measures, and matplotlib for the figures.
